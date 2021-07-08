@@ -16,9 +16,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Unique {
 
     String message() default "{package com.ot6.mercadolivre.shared.validation.annotation.unique}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
+
     String value() default "";
+
     String field();
+
     Class<?> theClass();
 }

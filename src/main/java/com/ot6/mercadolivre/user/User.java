@@ -30,12 +30,15 @@ public class User {
     @NotNull
     private LocalDateTime creationInstant = LocalDateTime.now();
 
+    @Deprecated
+    public User() {}
+
     public User(String email, CleanPassword cleanPassword) {
         this.email = email;
         this.password = cleanPassword.encode();
     }
 
     public NewUserResponse toNewUserResponse() {
-        return new NewUserResponse(this.id);
+        return new NewUserResponse(this.id, this.email);
     }
 }

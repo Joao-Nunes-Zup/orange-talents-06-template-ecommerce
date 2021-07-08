@@ -2,7 +2,6 @@ package com.ot6.mercadolivre.user;
 
 import com.ot6.mercadolivre.user.dtos.NewUserResponse;
 import com.ot6.mercadolivre.user.helpers.CleanPassword;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -10,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -30,12 +31,27 @@ public class User {
     @NotNull
     private LocalDateTime creationInstant = LocalDateTime.now();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Profile> profiles = new ArrayList<>();
+
     @Deprecated
     public User() {}
 
     public User(String email, CleanPassword cleanPassword) {
         this.email = email;
         this.password = cleanPassword.encode();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public List<Profile> getAuthorities() {
+        return profiles;
     }
 
     public NewUserResponse toNewUserResponse() {

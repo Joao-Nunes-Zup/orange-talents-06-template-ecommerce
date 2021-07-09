@@ -1,4 +1,4 @@
-package com.ot6.mercadolivre.shared.validation.annotation;
+package com.ot6.mercadolivre.shared.validation;
 
 import org.springframework.util.Assert;
 

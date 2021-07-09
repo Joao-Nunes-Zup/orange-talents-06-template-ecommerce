@@ -2,6 +2,7 @@ package com.ot6.mercadolivre.user;
 
 import com.ot6.mercadolivre.user.dtos.NewUserResponse;
 import com.ot6.mercadolivre.user.helpers.CleanPassword;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -42,19 +43,11 @@ public class User {
         this.password = cleanPassword.encode();
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public List<Profile> getAuthorities() {
-        return profiles;
-    }
-
     public NewUserResponse toNewUserResponse() {
         return new NewUserResponse(this.id, this.email);
+    }
+
+    public UserDetails toLoggedUser() {
+        return new LoggedUser(this.email, this.password, this.profiles);
     }
 }

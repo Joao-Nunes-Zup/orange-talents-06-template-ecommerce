@@ -1,7 +1,7 @@
 package com.ot6.mercadolivre.user.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ot6.mercadolivre.shared.validation.annotation.Unique;
+import com.ot6.mercadolivre.shared.validation.Unique;
 import com.ot6.mercadolivre.user.User;
 import com.ot6.mercadolivre.user.helpers.CleanPassword;
 

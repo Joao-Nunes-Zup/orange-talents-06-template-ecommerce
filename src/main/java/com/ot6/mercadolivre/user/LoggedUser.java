@@ -4,29 +4,35 @@ import com.ot6.mercadolivre.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class LoggedUser implements UserDetails {
 
-    private User user;
+    private String username;
+    private String password;
+    private List<Profile> profiles = new ArrayList<Profile>();
 
-    public LoggedUser(User user) {
-        this.user = user;
+    public LoggedUser(String username, String password, List<Profile> profiles) {
+        this.username = username;
+        this.password = password;
+        profiles.forEach(profile -> { this.profiles.add(profile); });
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getAuthorities();
+        return this.profiles;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return this.username;
     }
 
     @Override

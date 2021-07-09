@@ -1,4 +1,4 @@
-package com.ot6.mercadolivre.shared.validation.annotation;
+package com.ot6.mercadolivre.shared.validation;
 
 import org.springframework.util.Assert;
 
@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 public class UniqueValidator implements ConstraintValidator<Unique, Object> {

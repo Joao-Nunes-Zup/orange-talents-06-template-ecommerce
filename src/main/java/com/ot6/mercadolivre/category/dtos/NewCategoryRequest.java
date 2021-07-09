@@ -2,8 +2,8 @@ package com.ot6.mercadolivre.category.dtos;
 
 import com.ot6.mercadolivre.category.Category;
 import com.ot6.mercadolivre.category.CategoryRepository;
-import com.ot6.mercadolivre.shared.validation.annotation.ExistingId;
-import com.ot6.mercadolivre.shared.validation.annotation.Unique;
+import com.ot6.mercadolivre.shared.validation.ExistingId;
+import com.ot6.mercadolivre.shared.validation.Unique;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;

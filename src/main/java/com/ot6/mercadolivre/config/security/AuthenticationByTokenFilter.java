@@ -1,9 +1,11 @@
 package com.ot6.mercadolivre.config.security;
 
+import com.ot6.mercadolivre.user.LoggedUser;
 import com.ot6.mercadolivre.user.User;
 import com.ot6.mercadolivre.user.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -50,10 +52,11 @@ public class AuthenticationByTokenFilter extends OncePerRequestFilter {
     private void authenticateUser(String token) {
         String email = tokenService.getUserEmailFrom(token);
         User user = userRepository.findByEmail(email).get();
+        UserDetails loggedUser = user.toLoggedUser();
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
-                        user, null, user.getAuthorities());
+                        loggedUser, null, loggedUser.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

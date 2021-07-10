@@ -1,6 +1,7 @@
 package com.ot6.mercadolivre.product;
 
-import com.ot6.mercadolivre.product.dtos.NewOpinionRequest;
+import com.ot6.mercadolivre.product.dtos.NewQuestionRequest;
+import com.ot6.mercadolivre.shared.email.Emails;
 import com.ot6.mercadolivre.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,38 +9,45 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-public class ProductOpinionController {
-
-    @Autowired
-    ProductRepository productRepository;
+public class ProductQuestionController {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
-    ProductOpinionRepository opinionRepository;
+    ProductRepository productRepository;
+
+    @Autowired
+    ProductQuestionRepository questionRepository;
+
+    @Autowired
+    Emails emails;
 
     @Transactional
-    @PostMapping("products/{productId}/opinions")
-    public ResponseEntity<?> addProductOpinion(
-            @PathVariable Long productId,
-            @RequestBody @Valid NewOpinionRequest opinionRequest)
-    {
+    @PostMapping("/products/{productId}/questions")
+    public ResponseEntity<?> create(
+            @RequestBody @Valid NewQuestionRequest questionRequest,
+            @PathVariable Long productId
+    ) {
         Optional<Product> product = productRepository.findById(productId);
 
         if (product.isEmpty()) {
             return ResponseEntity.badRequest().body("Produto não cadastrado");
         }
 
-        ProductOpinion opinion = opinionRequest.toEntity(product.get(), userRepository);
-        opinionRepository.save(opinion);
+        ProductQuestion question = questionRequest.toEntity(product.get(), userRepository);
+        questionRepository.save(question);
 
-        return ResponseEntity.ok(opinion.toNewOpinionResponse());
+        emails.newQuestion(question);
+
+        return ResponseEntity.ok().body(question.toString());
     }
+
 }

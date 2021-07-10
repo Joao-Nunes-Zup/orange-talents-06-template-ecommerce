@@ -43,6 +43,10 @@ public class User {
         this.password = cleanPassword.encode();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public NewUserResponse toNewUserResponse() {
         return new NewUserResponse(this.id, this.email);
     }

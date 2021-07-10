@@ -83,6 +83,10 @@ public class Product {
         this.features.addAll(newFeatures);
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
     public NewProductResponse toNewProductResponse() {
         return new NewProductResponse(this.name);
     }

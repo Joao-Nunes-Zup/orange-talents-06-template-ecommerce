@@ -1,4 +1,4 @@
-package com.ot6.mercadolivre.product;
+package com.ot6.mercadolivre.product.dtos;
 
 public class NewProductResponse {
 

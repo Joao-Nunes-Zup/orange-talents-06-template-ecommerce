@@ -2,7 +2,13 @@ package com.ot6.mercadolivre.product;
 
 import com.ot6.mercadolivre.category.Category;
 import com.ot6.mercadolivre.product.dtos.NewProductFeatureRequest;
+import com.ot6.mercadolivre.product.dtos.NewProductResponse;
+import com.ot6.mercadolivre.product.dtos.ProductWithImageResponse;
 import com.ot6.mercadolivre.user.User;
+import com.ot6.mercadolivre.user.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -45,7 +51,13 @@ public class Product {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+    private Set<ProductImage> images = new HashSet<>();
+
     private LocalDateTime creationDate = LocalDateTime.now();
+
+    @Deprecated
+    public Product() {}
 
     public Product(
             String name,
@@ -73,5 +85,26 @@ public class Product {
 
     public NewProductResponse toNewProductResponse() {
         return new NewProductResponse(this.name);
+    }
+
+    public void addImages(Set<String> links) {
+        Set<ProductImage> images = links.stream()
+                .map(link -> new ProductImage(link, this))
+                .collect(Collectors.toSet());
+
+        this.images.addAll(images);
+    }
+
+    public ProductWithImageResponse toNewProductWithImageResponse() {
+        return new ProductWithImageResponse(this.name, this.images);
+    }
+
+    public boolean belongsToLoggedUser(UserRepository userRepository) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails authUser = (UserDetails) auth.getPrincipal();
+        String email = authUser.getUsername();
+
+        User loggedUser = userRepository.findByEmail(email).get();
+        return this.user == loggedUser;
     }
 }

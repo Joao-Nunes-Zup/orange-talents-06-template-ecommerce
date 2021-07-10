@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "product_opinions")
-public class Opinion {
+public class ProductOpinion {
 
     @Id
     @GeneratedValue
@@ -33,7 +33,7 @@ public class Opinion {
     @ManyToOne
     private User user;
 
-    public Opinion(
+    public ProductOpinion(
             Integer grade,
             String title,
             String description,

@@ -1,6 +1,6 @@
 package com.ot6.mercadolivre.product.dtos;
 
-import com.ot6.mercadolivre.product.Opinion;
+import com.ot6.mercadolivre.product.ProductOpinion;
 import com.ot6.mercadolivre.product.Product;
 import com.ot6.mercadolivre.user.User;
 import com.ot6.mercadolivre.user.UserRepository;
@@ -30,7 +30,7 @@ public class NewOpinionRequest {
         this.description = description;
     }
 
-    public Opinion toEntity(Product product, UserRepository userRepository) {
+    public ProductOpinion toEntity(Product product, UserRepository userRepository) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails authUser = (UserDetails) auth.getPrincipal();
@@ -38,7 +38,7 @@ public class NewOpinionRequest {
 
         User user = userRepository.findByEmail(email).get();
 
-        return new Opinion(
+        return new ProductOpinion(
                 this.grade,
                 this.title,
                 this.description,

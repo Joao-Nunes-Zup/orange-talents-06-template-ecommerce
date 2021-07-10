@@ -1,10 +1,7 @@
 package com.ot6.mercadolivre.product;
 
 import com.ot6.mercadolivre.category.CategoryRepository;
-import com.ot6.mercadolivre.product.dtos.NewProductImageRequest;
-import com.ot6.mercadolivre.product.dtos.NewProductRequest;
-import com.ot6.mercadolivre.product.dtos.NewProductResponse;
-import com.ot6.mercadolivre.product.dtos.ProductWithImageResponse;
+import com.ot6.mercadolivre.product.dtos.*;
 import com.ot6.mercadolivre.product.validation.ForbidRepeatedFeatures;
 import com.ot6.mercadolivre.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Optional;
@@ -34,8 +29,8 @@ public class ProductController {
     @Autowired
     ProductRepository productRepository;
 
-    @PersistenceContext
-    EntityManager manager;
+    @Autowired
+    OpinionRepository opinionRepository;
 
     @Autowired
     ForbidRepeatedFeatures forbidRepeatedFeatures;
@@ -50,7 +45,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<NewProductResponse> create(@RequestBody @Valid NewProductRequest newProductRequest) {
+    public ResponseEntity<NewProductResponse> createNewProduct(@RequestBody @Valid NewProductRequest newProductRequest) {
         Product product = newProductRequest.toEntity(categoryRepository, userRepository);
         productRepository.save(product);
         return ResponseEntity.ok(product.toNewProductResponse());
@@ -58,7 +53,7 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/{id}/images")
-    public ResponseEntity<?> create(@PathVariable Long id, @Valid NewProductImageRequest imageRequest) {
+    public ResponseEntity<?> addProductImages(@PathVariable Long id, @Valid NewProductImageRequest imageRequest) {
         Optional<Product> possibleProduct = productRepository.findById(id);
 
         if (possibleProduct.isEmpty()) {
@@ -75,5 +70,23 @@ public class ProductController {
         product.addImages(links);
         productRepository.save(product);
         return ResponseEntity.ok(product.toNewProductWithImageResponse());
+    }
+
+    @Transactional
+    @PostMapping("/{productId}/opinions")
+    public ResponseEntity<?> addProductOpinion(
+            @PathVariable Long productId,
+            @RequestBody @Valid NewOpinionRequest opinionRequest)
+    {
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (product.isEmpty()) {
+            return ResponseEntity.badRequest().body("Produto não cadastrado");
+        }
+
+        Opinion opinion = opinionRequest.toEntity(product.get(), userRepository);
+        opinionRepository.save(opinion);
+
+        return ResponseEntity.ok(opinion.toNewOpinionResponse());
     }
 }

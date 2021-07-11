@@ -1,5 +1,7 @@
 package com.ot6.mercadolivre.product;
 
+import com.ot6.mercadolivre.product.dtos.ProductFeatureResponse;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -20,9 +22,16 @@ public class ProductFeature {
     @ManyToOne
     private Product product;
 
+    @Deprecated
+    public ProductFeature() {}
+
     public ProductFeature(String name, String description, Product product) {
         this.name = name;
         this.description = description;
         this.product = product;
+    }
+
+    public ProductFeatureResponse toProductFeatureResponse() {
+        return new ProductFeatureResponse(this.name, this.description);
     }
 }

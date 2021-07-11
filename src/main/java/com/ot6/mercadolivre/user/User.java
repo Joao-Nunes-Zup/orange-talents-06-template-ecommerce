@@ -1,6 +1,7 @@
 package com.ot6.mercadolivre.user;
 
 import com.ot6.mercadolivre.user.dtos.NewUserResponse;
+import com.ot6.mercadolivre.user.dtos.UserDetailsResponse;
 import com.ot6.mercadolivre.user.helpers.CleanPassword;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -53,5 +54,9 @@ public class User {
 
     public UserDetails toLoggedUser() {
         return new LoggedUser(this.email, this.password, this.profiles);
+    }
+
+    public UserDetailsResponse toUserDetailsResponse() {
+        return new UserDetailsResponse(this.id, this.email);
     }
 }

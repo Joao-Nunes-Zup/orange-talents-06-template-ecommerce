@@ -2,6 +2,7 @@ package com.ot6.mercadolivre.product;
 
 import com.ot6.mercadolivre.product.Product;
 import com.ot6.mercadolivre.product.dtos.NewOpinionResponse;
+import com.ot6.mercadolivre.product.dtos.ProductOpinionResponse;
 import com.ot6.mercadolivre.user.User;
 
 import javax.persistence.*;
@@ -33,6 +34,9 @@ public class ProductOpinion {
     @ManyToOne
     private User user;
 
+    @Deprecated
+    public ProductOpinion() {}
+
     public ProductOpinion(
             Integer grade,
             String title,
@@ -54,6 +58,14 @@ public class ProductOpinion {
                 this.description,
                 this.product.toNewProductResponse(),
                 this.user.toNewUserResponse()
+        );
+    }
+
+    public ProductOpinionResponse toProductOpinionResponse() {
+        return new ProductOpinionResponse(
+                this.title,
+                this.description,
+                this.user.toUserDetailsResponse()
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.ot6.mercadolivre.category;
 
 import com.ot6.mercadolivre.category.dtos.NewCategoryResponse;
+import com.ot6.mercadolivre.product.dtos.ProductCategoryResponse;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,5 +33,16 @@ public class Category {
 
     public NewCategoryResponse toNewCategoryResponse() {
         return new NewCategoryResponse(this.id);
+    }
+
+    public ProductCategoryResponse toProductCategoryResponse() {
+        ProductCategoryResponse categoryResponse =
+                new ProductCategoryResponse(this.id, this.name);
+
+        if (this.motherCategory != null) {
+            categoryResponse.setMotherCategory(this.motherCategory.toProductCategoryResponse());
+        }
+
+        return categoryResponse;
     }
 }

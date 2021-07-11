@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -23,6 +24,9 @@ public class ProductController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    ProductOpinionRepository opinionRepository;
 
     @Autowired
     ForbidRepeatedFeatures forbidRepeatedFeatures;
@@ -38,5 +42,18 @@ public class ProductController {
         Product product = newProductRequest.toEntity(categoryRepository, userRepository);
         productRepository.save(product);
         return ResponseEntity.ok(product.toNewProductResponse());
+    }
+
+    @GetMapping("/products/{id}")
+    public ResponseEntity<?> detail(@PathVariable Long id) {
+        Optional<Product> product = productRepository.findById(id);
+
+        if (product.isEmpty()) {
+            return ResponseEntity.badRequest().body("Produto não encontrado");
+        }
+
+        ProductDetailsResponse productResponse = product.get().toProductDetailsResponse(opinionRepository);
+
+        return ResponseEntity.ok(productResponse);
     }
 }

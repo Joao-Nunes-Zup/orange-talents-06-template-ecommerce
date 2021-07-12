@@ -4,6 +4,7 @@ import com.ot6.mercadolivre.category.Category;
 import com.ot6.mercadolivre.product.dtos.*;
 import com.ot6.mercadolivre.user.User;
 import com.ot6.mercadolivre.user.UserRepository;
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -135,5 +136,16 @@ public class Product {
 
         User loggedUser = userRepository.findByEmail(email).get();
         return this.user == loggedUser;
+    }
+
+    public boolean destock(Integer quantity) {
+        Assert.isTrue(quantity > 0, "A quantidade de itens deve ser maior que 0");
+
+        if (this.quantity >= quantity) {
+            this.quantity -= quantity;
+            return true;
+        }
+
+        return false;
     }
 }

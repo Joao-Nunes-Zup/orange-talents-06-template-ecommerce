@@ -49,27 +49,7 @@ public class CloseSaleController {
 
             emails.newSale(sale);
 
-            if (gateway.equals(PaymentGateway.pagseguro)) {
-                String urlPagseguro = uriBuilder
-                        .path("pagseguro.com?returnId={id}")
-                        .buildAndExpand(sale.getId()).toString();
-
-                return ResponseEntity.ok().body(
-                        "pagseguro.com?buyerId=" + sale.getId()
-                        + "&redirectUrl=" + urlPagseguro
-                );
-            }
-
-            if (gateway.equals(PaymentGateway.paypal)) {
-                String urlPaypal = uriBuilder
-                        .path("paypal.com?returnId={id}")
-                        .buildAndExpand(sale.getId()).toString();
-
-                return ResponseEntity.ok().body(
-                        "paypal.com?buyerId=" + sale.getId()
-                                + "&redirectUrl=" + urlPaypal
-                );
-            }
+            return ResponseEntity.ok().body(sale.redirectionUrl(uriBuilder));
         }
 
          return ResponseEntity

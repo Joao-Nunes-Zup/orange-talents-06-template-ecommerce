@@ -40,6 +40,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/products/{id}").permitAll()
                 .antMatchers(HttpMethod.POST, "/sales").permitAll()
+                .antMatchers(HttpMethod.POST, "/invoices").permitAll()
+                .antMatchers(HttpMethod.POST, "/seller-rank").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .csrf().disable()

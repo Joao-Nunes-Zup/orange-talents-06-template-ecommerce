@@ -5,9 +5,6 @@ import com.ot6.mercadolivre.sale.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 @Component
 public class Emails {
 
@@ -15,7 +12,6 @@ public class Emails {
     Mailer mailer;
 
     public void newQuestion(ProductQuestion question) {
-
         mailer.send(
                 "<html>....</html>",
                 "Question to be answered",
@@ -26,13 +22,32 @@ public class Emails {
     }
 
     public void newSale(Sale sale) {
-
         mailer.send(
                 "<html>....</html>",
                 "New purchase",
                 "purchase@mercadolivre.com",
-                sale.getUserEmail(),
+                sale.getBuyerEmail(),
                 sale.getProductOwnerEmail()
+        );
+    }
+
+    public void paymentSucceeded(Sale sale) {
+        mailer.send(
+                "<html>....</html>",
+                "Purchase Success",
+                "purchase@mercadolivre.com",
+                sale.getProductOwnerEmail(),
+                sale.getBuyerEmail()
+        );
+    }
+
+    public void paymentFailure(Sale sale) {
+        mailer.send(
+                "<html>....</html>",
+                "Purchase Fail",
+                "purchase@mercadolivre.com",
+                sale.getProductOwnerEmail(),
+                sale.getBuyerEmail()
         );
     }
 }

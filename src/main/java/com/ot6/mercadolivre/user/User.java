@@ -48,6 +48,10 @@ public class User {
         return email;
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
     public NewUserResponse toNewUserResponse() {
         return new NewUserResponse(this.id, this.email);
     }
